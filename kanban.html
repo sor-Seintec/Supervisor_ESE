@@ -25,7 +25,6 @@
             --c-adiado: #9333ea;      /* Roxo (A) */
             --c-cancelado: #ef4444;   /* Vermelho (C) */
             --c-justificado: #3b82f6; /* Azul (J) */
-            --c-planejado: #f97316;   /* Laranja (P) */
         }
 
         body {
@@ -478,7 +477,6 @@
             border-color: var(--primary);
         }
 
-        /* BADGES DE STATUS (Vistorias) - Atualizado com a Regra Unificada */
         .badge-status {
             position: absolute;
             bottom: 8px;
@@ -501,7 +499,6 @@
         .st-cancelada { background-color: var(--c-cancelado); }
         .st-adiada { background-color: var(--c-adiado); }
         .st-justificada { background-color: var(--c-justificado); }
-        .st-planejado { background-color: var(--c-planejado); }
 
         .c-1 { --cor: #e11d48; }
         .c-2 { --cor: #059669; }
@@ -553,25 +550,32 @@
             text-align: center;
         }
 
+        /* TOAST (NOTIFICAÇÃO) - DESIGN BLINDADO (BRANCO TEXTO ESCURO) */
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1e293b;
-            color: white;
-            padding: 12px 24px;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            padding: 14px 24px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            z-index: 999;
-            animation: slideUp 0.3s ease-out;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid #1e293b; /* Borda padrão escura */
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideUp 0.3s ease-out forwards;
             pointer-events: none;
+            white-space: nowrap;
         }
 
-        .toast.error { background: var(--danger); }
-        .toast.success { background: var(--success); }
+        .toast.error { border-left-color: var(--danger) !important; }
+        .toast.success { border-left-color: var(--success) !important; }
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateX(-50%) translateY(20px); }
@@ -584,7 +588,6 @@
 
     <div class="header">
         <h1>🗓️ Planejamento de Visitas (Kanban)</h1>
-        <!-- Link corrigido para o Portal -->
         <a href="index.html" class="btn-back" id="linkVoltar">⬅ Voltar ao Portal</a>
     </div>
 
@@ -642,7 +645,8 @@
 
         <div style="display:flex;align-items:center;gap:12px;margin-left:auto;">
             <span id="statusBadge" class="badge-local">✅ Sincronizado</span>
-            <button class="btn-save-cloud" id="btnSalvarNuvem" onclick="salvarAgendaNaNuvem()">Sincronizar com Nuvem</button>
+            <button class="btn-save-cloud" id="btnSalvarNuvem" onclick="salvarAgendaNaNuvem()">Sincronizar com
+                Nuvem</button>
         </div>
     </div>
 
@@ -674,7 +678,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isAdmin = urlParams.get('admin') === 'true';
 
-        // Correção de rota (index.html em minúsculo)
         if (isAdmin) {
             document.getElementById('linkVoltar').href = 'index.html?admin=true';
         }
@@ -792,12 +795,22 @@
 
         let draggingData = null;
 
+        // FUNÇÃO DE TOAST BLINDADA PARA NÃO FICAR BRANCA
         function mostrarToast(mensagem, tipo = 'error') {
             const toast = document.createElement('div');
             toast.className = `toast ${tipo}`;
-            toast.textContent = mensagem;
+            toast.innerHTML = mensagem;
             document.body.appendChild(toast);
-            setTimeout(() => { toast.remove(); }, 3000);
+            
+            // Faz sumir com fade out suave depois de 3 segundos
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                    if (toast.parentElement) toast.remove();
+                }, 300);
+            }, 3000);
         }
 
         function verificarDuplicataNaData(data, escola) {
@@ -959,7 +972,6 @@
                     let statusExecutado = vistoriasNuvem[chaveCruzamento];
                     let seloHtml = '';
 
-                    // LÓGICA DE CORES UNIFICADA AQUI (V, C, A, J)
                     if (statusExecutado) {
                         let stStr = String(statusExecutado).toLowerCase();
                         if (stStr.includes('realizada') || stStr.includes('visitado')) {
