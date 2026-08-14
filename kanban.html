@@ -25,6 +25,7 @@
             --c-adiado: #9333ea;      /* Roxo (A) */
             --c-cancelado: #ef4444;   /* Vermelho (C) */
             --c-justificado: #3b82f6; /* Azul (J) */
+            --c-planejado: #f97316;   /* Laranja (P) */
         }
 
         body {
@@ -500,6 +501,7 @@
         .st-cancelada { background-color: var(--c-cancelado); }
         .st-adiada { background-color: var(--c-adiado); }
         .st-justificada { background-color: var(--c-justificado); }
+        .st-planejado { background-color: var(--c-planejado); }
 
         .c-1 { --cor: #e11d48; }
         .c-2 { --cor: #059669; }
@@ -582,7 +584,7 @@
 
     <div class="header">
         <h1>🗓️ Planejamento de Visitas (Kanban)</h1>
-        <!-- AQUI ESTÁ A CORREÇÃO: "index.html" com i minúsculo -->
+        <!-- Link corrigido para o Portal -->
         <a href="index.html" class="btn-back" id="linkVoltar">⬅ Voltar ao Portal</a>
     </div>
 
@@ -672,7 +674,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isAdmin = urlParams.get('admin') === 'true';
 
-        // AQUI TAMBÉM: "index.html" com i minúsculo
+        // Correção de rota (index.html em minúsculo)
         if (isAdmin) {
             document.getElementById('linkVoltar').href = 'index.html?admin=true';
         }
