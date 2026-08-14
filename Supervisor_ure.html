@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Controle de Vistoria URE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Importação dos Ícones Oficiais do Google (Material Symbols) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0" />
+<style>
+  :root{ --ink:#0F1B2A; --navy:#173A5E; --navy-deep:#0F2743; --navy-light:#3D6693; --sky:#EEF3F9; --paper:#FFFFFF; --line:#DEE6EE; --muted:#63728A; --green:#279A57; --red:#DD4A47; --amber:#EE9F2E; --radius-lg:20px; --radius-md:14px; --radius-sm:10px; --shadow-card: 0 16px 40px -18px rgba(15,27,42,0.28); --font-display:'Outfit', sans-serif; --font-body:'Inter', sans-serif; }
+  *{box-sizing:border-box;}
+  body{ margin:0; min-height:100vh; font-family:var(--font-body); color:var(--ink); background: var(--sky); padding:28px 16px 60px; display:flex; justify-content:center; }
+  
+  #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sky); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
+  .login-card { background: var(--paper); padding: 25px; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); text-align: center; max-width: 340px; width: 90%; }
+  .btn-social { width: 100%; padding: 12px; margin-top: 10px; background: #fff; color: #3c4043; border: 1px solid #dadce0; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s; }
+  .btn-social:hover { background: #f8f9fa; }
+  .divider { display: flex; align-items: center; text-align: center; color: var(--muted); font-size: 12px; margin: 15px 0; }
+  .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--line); }
+  .login-input { width: 100%; padding: 10px 12px; margin-bottom: 10px; border: 1.5px solid var(--line); border-radius: 8px; font-size: 14px; background: #F8FAFC; outline: none; }
+  .btn-email-login { width: 100%; padding: 12px; background: var(--navy); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; }
+  .toggle-reg { margin-top: 15px; font-size: 12px; color: var(--navy-light); cursor: pointer; background: none; border: none; text-decoration: underline; }
+
+  .user-badge { position: absolute; top: -15px; left: 0; font-size: 11px; background: #e2e8f0; padding: 4px 8px; border-radius: 6px; color: var(--muted); font-weight: 600; }
+  .container{ width:100%; max-width:460px; position: relative; }
+  
+  .btn-kanban-nav { position: absolute; top: -18px; right: 0; background: #2563eb; color: #fff; border: none; border-radius: var(--radius-sm); padding: 8px 12px; font-weight: 700; font-size: 12px; cursor: pointer; box-shadow: var(--shadow-card); text-decoration: none; display: flex; align-items: center; gap: 5px;}
+  .btn-kanban-nav:hover { background: #1d4ed8; }
+
+  .eyebrow{ display:flex; align-items:center; justify-content:center; gap:8px; font-family:var(--font-body); font-weight:700; font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--navy-light); margin-bottom:8px; }
+  .eyebrow::before, .eyebrow::after{ content:""; height:1px; width:26px; background:var(--line); }
+  h1{ font-family:var(--font-display); font-weight:700; font-size:29px; line-height:1.15; text-align:center; color:var(--navy-deep); margin:0 0 6px; letter-spacing:-0.01em; }
+  .subtitle{ text-align:center; color:var(--muted); font-size:14px; margin:0 0 24px; }
+
+  .type-toggle { display: flex; background: #F1F4F8; border-radius: 12px; padding: 4px; margin-bottom: 24px; }
+  .type-btn { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 10px; font-weight: 600; font-size: 14px; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .type-btn.active { background: #fff; color: var(--navy-deep); box-shadow: 0 2px 8px rgba(15,27,42,0.08); }
+
+  .card{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-lg); box-shadow:var(--shadow-card); padding:22px 20px 24px; }
+  .field{ margin-bottom:18px; } .field-label{ display:flex; align-items:center; gap:9px; font-weight:700; font-size:13.5px; color:var(--ink); margin-bottom:9px; }
+  .step-num{ flex:0 0 auto; width:19px; height:19px; border-radius:50%; background:var(--navy); color:#fff; font-family:var(--font-display); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  
+  .picker-btn{ width:100%; display:flex; align-items:center; gap:12px; background:#F8FAFC; border:1.5px solid var(--line); border-radius:var(--radius-md); padding:11px 12px; cursor:pointer; text-align:left; font-family:var(--font-body); }
+  .avatar{ flex:0 0 auto; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:700; font-size:12.5px; }
+  .avatar.placeholder{ background:#E4EAF1; color:#8DA0B5; } .avatar.school{ background:var(--navy); }
+  .picker-text{ flex:1 1 auto; min-width:0; } .picker-title{ font-size:14.5px; font-weight:600; color:var(--ink); }
+  .picker-btn:not(.filled) .picker-title{ color:#8DA0B5; font-weight:500; }
+  
+  #fixedSupervisorDisplay { background: #F1F6FB; border: 1.5px solid var(--navy-light); border-radius: var(--radius-md); padding: 11px 12px; display: flex; align-items: center; justify-content: space-between; }
+  .btn-trocar { background: rgba(221, 74, 71, 0.1); color: var(--red); border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+  .btn-trocar:hover { background: rgba(221, 74, 71, 0.2); }
+
+  input[type="date"], textarea.admin-input { width:100%; padding:11px 12px; border:1.5px solid var(--line); border-radius:var(--radius-md); font-size:14.5px; font-family:var(--font-body); color:var(--ink); background:#F8FAFC; margin-bottom: 10px; }
+  textarea.admin-input { resize: vertical; min-height: 80px; }
+  
+  .chip-group{ display:flex; gap:8px; flex-wrap:wrap; } .chip-group input[type="radio"]{ display:none; }
+  .chip{ flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:10px 8px; border-radius:var(--radius-sm); border:1.5px solid var(--line); background:#F8FAFC; color:var(--muted); font-weight:600; font-size:13px; cursor:pointer; }
+  input#stRealizada:checked + .chip{ background:#E5F6EC; border-color:var(--green); color:var(--green); }
+  input#stCancelada:checked + .chip{ background:#FCEAE9; border-color:var(--red); color:var(--red); }
+  input#stAdiada:checked + .chip{ background:#FCF1DF; border-color:var(--amber); color:#A66C11; }
+
+  .btn-submit { width:100%; padding:14px; border:none; border-radius:var(--radius-md); background:var(--navy); color:#fff; font-family:var(--font-display); font-weight:700; font-size:15px; cursor:pointer; margin-top:22px; transition: 0.2s;}
+  .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
+  
+  .sheet-overlay{ position:fixed; inset:0; background:rgba(15,27,42,0.45); display:flex; align-items:flex-end; justify-content:center; opacity:0; pointer-events:none; z-index:50; }
+  .sheet-overlay.open{ opacity:1; pointer-events:auto; }
+  .sheet{ width:100%; max-width:460px; max-height:85vh; background:var(--paper); border-radius:22px 22px 0 0; display:flex; flex-direction:column; transform:translateY(100%); transition:transform .3s; }
+  .sheet-overlay.open .sheet{ transform:translateY(0); }
+  .sheet-list { overflow-y:auto; padding:6px 18px 18px; flex: 1; }
+  .sheet-item{ display:flex; align-items:center; gap:12px; width:100%; padding:10px 8px; border:none; background:none; text-align:left; font-family:var(--font-body); cursor:pointer;}
+  .sheet-item.selected{ background:#EAF1F9; border-radius:var(--radius-sm);}
+  .sheet-item-name{ font-size:14px; font-weight:600; color:var(--ink); flex:1; }
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+    <div class="login-card">
+        <h1 style="font-size: 22px; margin-bottom: 5px;">Acesso Restrito</h1>
+        <p class="subtitle" style="margin-bottom: 15px; font-size: 13px;">Sistema URE</p>
+        <button id="btnGoogleLogin" class="btn-social">Entrar com o Google</button>
+        <button id="btnMicrosoftLogin" class="btn-social">Entrar com a Microsoft</button>
+        <div class="divider">ou use e-mail e senha</div>
+        <input type="email" id="loginEmail" class="login-input" placeholder="Seu e-mail">
+        <input type="password" id="loginPassword" class="login-input" placeholder="Sua senha">
+        <button id="btnEmailLogin" class="btn-email-login">Entrar</button>
+        <button type="button" class="toggle-reg" id="btnToggleReg">Não tem conta? Cadastre-se</button>
+    </div>
+</div>
+
+<div class="container">
+  <div class="user-badge" id="userBadge">Carregando...</div>
+  <a href="kanban.html" class="btn-kanban-nav" id="linkKanban">🗓️ Planejamento (Kanban)</a>
+
+  <p class="eyebrow" style="margin-top: 20px;">Controle de campo · URE</p>
+  <h1>Vistoria Escolar</h1>
+  <p class="subtitle">Registre a visita e envie direto para a planilha.</p>
+
+  <div class="card">
+    <div class="type-toggle">
+        <button type="button" class="type-btn active" id="btnTypeVistoria">Registrar Vistoria</button>
+        <button type="button" class="type-btn" id="btnTypeJustificativa">Enviar Justificativa</button>
+    </div>
+
+    <form id="vistoriaForm" novalidate>
+      <div class="field">
+        <label class="field-label"><span class="step-num">1</span>Supervisor(a)</label>
+        
+        <button type="button" class="picker-btn" id="btnSupervisor">
+          <span class="avatar placeholder" id="avatarSupervisor">
+             <!-- Ícone Material de Usuário -->
+             <span class="material-symbols-outlined" style="font-size: 18px;">person</span>
+          </span>
+          <span class="picker-text"><span class="picker-title" id="txtSupervisor">Toque para escolher</span></span>
+        </button>
+
+        <div id="fixedSupervisorDisplay" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="avatar school">
+                    <span class="material-symbols-outlined" style="font-size: 18px; color: #fff;">person</span>
+                </span>
+                <span style="font-weight: 700; color: var(--navy-deep); font-size: 14.5px;" id="lblFixedSupervisor">Nome</span>
+            </div>
+            <button type="button" class="btn-trocar" id="btnTrocarSupervisor" onclick="limparSupervisor()" style="display: none;">Trocar</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label"><span class="step-num">2</span>Escola(s)</label>
+        <button type="button" class="picker-btn" id="btnEscola" disabled>
+          <span class="avatar placeholder" id="avatarEscola">
+             <!-- Ícone Material de Escola (Inativo) -->
+             <span class="material-symbols-outlined" style="font-size: 18px;">school</span>
+          </span>
+          <span class="picker-text"><span class="picker-title" id="txtEscola">Escolha o supervisor primeiro</span></span>
+        </button>
+      </div>
+
+      <div class="field">
+        <label class="field-label"><span class="step-num">3</span>Data da visita</label>
+        <input type="date" id="dataHora" name="dataHora" required>
+      </div>
+
+      <div class="field" id="fieldStatus">
+        <label class="field-label"><span class="step-num">4</span>Status da visita</label>
+        <div class="chip-group">
+          <input type="radio" id="stRealizada" name="status" value="Realizada"><label for="stRealizada" class="chip">Realizada</label>
+          <input type="radio" id="stCancelada" name="status" value="Cancelada"><label for="stCancelada" class="chip">Cancelada</label>
+          <input type="radio" id="stAdiada" name="status" value="Adiada"><label for="stAdiada" class="chip">Adiada</label>
+        </div>
+      </div>
+
+      <div class="field" id="fieldJustificativa" style="display: none;">
+        <label class="field-label"><span class="step-num">4</span>Justificativa</label>
+        <textarea id="txtJustificativa" name="justificativa" class="admin-input" placeholder="Escreva o motivo detalhado..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSalvar">Carregando Planejamento...</button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet-overlay" id="sheetOverlay">
+  <div class="sheet">
+    <div style="padding:15px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between">
+      <h2 style="margin:0; font-size:16px; color:var(--navy-deep)">Selecione</h2>
+      <button type="button" id="sheetClose" style="background:none; border:none; font-size:16px">✕</button>
+    </div>
+    <div class="sheet-list" id="sheetList"></div>
+    <div style="padding: 15px;" id="sheetFooter"><button type="button" class="btn-submit" id="btnConfirmEscolas" style="margin:0; padding:12px;">Confirmar</button></div>
+  </div>
+</div>
+
+<!-- FIREBASE AUTH LOGIC -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDs12xgOEPIKu7pNjftNUThM0_-Z0BwoLY",
+    authDomain: "projetoure.firebaseapp.com",
+    projectId: "projetoure",
+    storageBucket: "projetoure.firebasestorage.app",
+    messagingSenderId: "114345231736",
+    appId: "1:114345231736:web:21d610c85bc9843ac4748d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  
+  let isRegistering = false;
+  window.loggedUserEmail = "";
+
+  document.getElementById('btnToggleReg').addEventListener('click', () => {
+    isRegistering = !isRegistering;
+    document.getElementById('btnEmailLogin').textContent = isRegistering ? "Criar Conta" : "Entrar";
+    document.getElementById('btnToggleReg').textContent = isRegistering ? "Já tem uma conta? Faça login" : "Não tem conta? Cadastre-se";
+  });
+
+  document.getElementById('btnGoogleLogin').addEventListener('click', () => { signInWithPopup(auth, new GoogleAuthProvider()).catch(e=>alert(e.message)); });
+  document.getElementById('btnMicrosoftLogin').addEventListener('click', () => { signInWithPopup(auth, new OAuthProvider('microsoft.com')).catch(e=>alert(e.message)); });
+  
+  document.getElementById('btnEmailLogin').addEventListener('click', () => {
+    const e = document.getElementById('loginEmail').value, p = document.getElementById('loginPassword').value;
+    if(!e || !p) return alert("Preencha tudo.");
+    if(isRegistering) createUserWithEmailAndPassword(auth, e, p).catch(err=>alert(err.message));
+    else signInWithEmailAndPassword(auth, e, p).catch(err=>alert(err.message));
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('loginScreen').style.display = 'none';
+      window.loggedUserEmail = user.email || (user.providerData[0] && user.providerData[0].email);
+      document.getElementById('userBadge').textContent = "👤 " + window.loggedUserEmail;
+    } else {
+      document.getElementById('loginScreen').style.display = 'flex';
+      window.loggedUserEmail = "";
+    }
+  });
+</script>
+
+<!-- APP LOGIC & FORM SUBMISSION -->
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymq_CP20Qcnp558XV_21FpyrdpYNV12bE9T4MMwvvMYkorgjknw66oJaTjjeR6RGHj/exec';
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const isAdmin = urlParams.get('admin') === 'true';
+
+  if(isAdmin) { document.getElementById('linkKanban').href = 'kanban.html?admin=true'; }
+
+  const database = JSON.parse(localStorage.getItem('ure_database_v2')) || {
+    "ADALBERTO": ["CEEJA Prof. Norberto Soares Ramos", "EE Francisco Eufrásio Monteiro", "EE Prof. Marco Antonio Mencacci", "EE Prof. Roberto Paschoalick"],
+    "ADRIANA ROSA": ["EE João Clímaco de Camargo Pires", "EE Francisco Camargo César", "EE Mario Guilherme Notari"],
+    "ALAN": ["EE Prof. Dionysio Vieira", "EE Prof. Flavio Gagliardi", "EE Prof. Jorge Madureira", "EE Prof Lauro Sanchez"],
+    "ANA DUARTE": ["EE João Rodrigues Bueno", "EE Maria Helena Gazzi Bonadio", "EE Prof.ª Sarah Salvestro"],
+    "ANA PAULA": ["EE Prof. Accácio de Vasconcelos Camargo", "EE Prof.ª Elzide Celestina Souza Pacheco Tunuchi", "EE Prof. Francisco Coccaro", "EE Reverendo Ovídio Antonio de Souza"]
+  };
+
+  let isJust = false, selSup = null, selEscolas = [], sheetType = '', currentItems = [];
+  
+  // ==========================================
+  // BLOQUEIO DE SEGURANÇA: SINCRONIZAÇÃO KANBAN
+  // ==========================================
+  let agendaNuvem = [];
+  let agendaCarregada = false;
+
+  function carregarAgenda() {
+      document.getElementById('btnSalvar').innerText = "Carregando Planejamento...";
+      document.getElementById('btnSalvar').disabled = true;
+      
+      fetch(SCRIPT_URL + '?action=getAgenda')
+          .then(res => res.json())
+          .then(data => {
+              agendaNuvem = data;
+              agendaCarregada = true;
+              document.getElementById('btnSalvar').innerText = isJust ? "Enviar Justificativa" : "Salvar Vistoria";
+              document.getElementById('btnSalvar').disabled = false;
+          })
+          .catch(err => {
+              alert("Erro ao conectar com o servidor para buscar o planejamento. Recarregue a página.");
+              document.getElementById('btnSalvar').innerText = "Erro de Conexão";
+          });
+  }
+  carregarAgenda(); 
+  // ==========================================
+
+  function setHojeData() {
+      const d = new Date();
+      const strData = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      document.getElementById('dataHora').value = strData;
+  }
+
+  document.getElementById('btnTypeVistoria').onclick = () => { 
+      isJust=false; 
+      document.getElementById('btnTypeVistoria').classList.add('active'); 
+      document.getElementById('btnTypeJustificativa').classList.remove('active'); 
+      document.getElementById('fieldStatus').style.display='block'; 
+      document.getElementById('fieldJustificativa').style.display='none'; 
+      if(agendaCarregada) document.getElementById('btnSalvar').innerText='Salvar Vistoria'; 
+  };
+  
+  document.getElementById('btnTypeJustificativa').onclick = () => { 
+      isJust=true; 
+      document.getElementById('btnTypeJustificativa').classList.add('active'); 
+      document.getElementById('btnTypeVistoria').classList.remove('active'); 
+      document.getElementById('fieldStatus').style.display='none'; 
+      document.getElementById('fieldJustificativa').style.display='block'; 
+      if(agendaCarregada) document.getElementById('btnSalvar').innerText='Enviar Justificativa'; 
+  };
+  setHojeData();
+
+  function fixarSupervisor(nome) {
+      selSup = nome;
+      localStorage.setItem('ure_supervisor_preferido', nome);
+      document.getElementById('btnSupervisor').style.display = 'none';
+      document.getElementById('fixedSupervisorDisplay').style.display = 'flex';
+      document.getElementById('lblFixedSupervisor').innerText = nome;
+      
+      if (isAdmin) { document.getElementById('btnTrocarSupervisor').style.display = 'block'; } 
+      else { document.getElementById('btnTrocarSupervisor').style.display = 'none'; }
+      
+      document.getElementById('btnEscola').disabled = false;
+      document.getElementById('txtEscola').innerText = "Toque para escolher a(s) escola(s)";
+  }
+
+  window.limparSupervisor = function() {
+      selSup = null; selEscolas = []; localStorage.removeItem('ure_supervisor_preferido');
+      document.getElementById('fixedSupervisorDisplay').style.display = 'none';
+      document.getElementById('btnSupervisor').style.display = '';
+      document.getElementById('txtSupervisor').innerText = "Toque para escolher";
+      document.getElementById('btnEscola').disabled = true;
+      document.getElementById('btnEscola').classList.remove('filled');
+      document.getElementById('txtEscola').innerText = "Escolha o supervisor primeiro";
+  };
+
+  const savedSup = localStorage.getItem('ure_supervisor_preferido');
+  if (savedSup && database[savedSup]) { fixarSupervisor(savedSup); }
+
+  function openSheet(type){
+    sheetType = type; currentItems = type==='sup' ? Object.keys(database).sort() : (database[selSup]||[]);
+    document.getElementById('sheetFooter').style.display = type==='esc'?'block':'none';
+    const list = document.getElementById('sheetList'); list.innerHTML = '';
+    
+    if(type==='esc' && currentItems.length > 0){
+        const btnT = document.createElement('button'); btnT.className='sheet-item'; 
+        // Ícone Web do Google Material para Escola (Botão Todas as Escolas)
+        btnT.innerHTML=`<span class="avatar school" style="background:var(--navy); color:#fff;"><span class="material-symbols-outlined" style="font-size: 18px;">school</span></span><span class="sheet-item-name">Todas as escolas</span>`;
+        btnT.onclick = () => { selEscolas = [...currentItems]; openSheet('esc'); }; list.appendChild(btnT);
+    }
+    
+    currentItems.forEach(i => {
+      const isSel = type==='sup' ? i===selSup : selEscolas.includes(i);
+      const btn = document.createElement('button'); btn.className = `sheet-item ${isSel?'selected':''}`;
+      
+      // Ícone Web do Google Material para Escola na Lista
+      const iconOuSigla = type==='sup' ? i.substring(0,2) : '<span class="material-symbols-outlined" style="font-size: 18px; color: #8DA0B5;">school</span>';
+      
+      btn.innerHTML = `<span class="avatar ${type==='sup'?'':'placeholder'}" style="${type==='esc' ? 'background: #E4EAF1;' : ''}">${iconOuSigla}</span><span class="sheet-item-name">${i}</span>`;
+      
+      btn.onclick = () => { 
+        if(type==='sup'){ fixarSupervisor(i); selEscolas=[]; document.getElementById('sheetOverlay').classList.remove('open'); setTimeout(()=>openSheet('esc'), 300); } 
+        else { if(selEscolas.includes(i)) selEscolas=selEscolas.filter(e=>e!==i); else selEscolas.push(i); openSheet('esc'); } 
+      };
+      list.appendChild(btn);
+    });
+    document.getElementById('sheetOverlay').classList.add('open');
+  }
+
+  document.getElementById('btnConfirmEscolas').onclick = () => { 
+      document.getElementById('txtEscola').innerText = selEscolas.length + ' escola(s)'; 
+      document.getElementById('btnEscola').classList.add('filled'); 
+      document.getElementById('sheetOverlay').classList.remove('open'); 
+      
+      // Quando seleciona as escolas, ativa o ícone de escola e muda a cor dele para a cor de destaque
+      const avatarIcon = document.getElementById('avatarEscola');
+      avatarIcon.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">school</span>';
+      avatarIcon.className = 'avatar school';
+  };
+  
+  document.getElementById('btnSupervisor').onclick = () => openSheet('sup'); 
+  document.getElementById('btnEscola').onclick = () => { if(selSup) openSheet('esc'); };
+  document.getElementById('sheetClose').onclick = () => document.getElementById('sheetOverlay').classList.remove('open');
+
+  document.getElementById('vistoriaForm').onsubmit = e => {
+    e.preventDefault(); 
+    
+    if(!selSup || selEscolas.length===0) return alert('Por favor, preencha as escolas antes de continuar.');
+    if(!agendaCarregada) return alert('Aguarde o carregamento do planejamento antes de salvar.');
+
+    const inputData = document.getElementById('dataHora').value;
+    if(!inputData) return alert('Por favor, selecione uma data válida.');
+
+    let escolasNaoPlanejadas = [];
+    
+    selEscolas.forEach(escolaSelecionada => {
+        let planejada = agendaNuvem.find(item => {
+            if (!item['Data Agendada']) return false;
+            let dataAgenda = item['Data Agendada'].split('T')[0]; 
+            return dataAgenda === inputData && 
+                   item['Supervisor'].trim() === selSup.trim() && 
+                   item['Escola'].trim() === escolaSelecionada.trim();
+        });
+        
+        if (!planejada) {
+            escolasNaoPlanejadas.push(escolaSelecionada);
+        }
+    });
+
+    if (escolasNaoPlanejadas.length > 0) {
+        const dataFormatada = inputData.split('-').reverse().join('/');
+        alert(`⚠️ AÇÃO BLOQUEADA!\n\nA escola:\n"${escolasNaoPlanejadas[0]}"\nnão está agendada no seu Kanban para o dia ${dataFormatada}.\n\nPor favor, acesse o "Planejamento (Kanban)" e inclua a escola nesta data antes de registrar a vistoria.`);
+        return; 
+    }
+    
+    const fd = new FormData(e.target); 
+    fd.set('supervisor', selSup); 
+    fd.set('escola', selEscolas.join(', ')); 
+    fd.set('emailUser', window.loggedUserEmail);
+    if(isJust) fd.set('status', 'Justificada');
+    
+    document.getElementById('btnSalvar').disabled = true; 
+    document.getElementById('btnSalvar').innerText = "Salvando...";
+    
+    fetch(SCRIPT_URL, { method: 'POST', body: fd, mode: 'no-cors' }).then(() => {
+      alert('Salvo com sucesso!'); 
+      e.target.reset(); 
+      selEscolas=[]; 
+      setHojeData();
+      document.getElementById('btnEscola').classList.remove('filled'); 
+      document.getElementById('txtEscola').innerText="Toque para escolher a(s) escola(s)"; 
+      
+      // Reseta o ícone da escola para o estado inicial
+      const avatarIcon = document.getElementById('avatarEscola');
+      avatarIcon.className = 'avatar placeholder';
+      avatarIcon.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">school</span>';
+
+      document.getElementById('btnSalvar').disabled = false; 
+      document.getElementById('btnSalvar').innerText = isJust ? "Enviar Justificativa" : "Salvar Vistoria";
+    }).catch(error => {
+      alert('Ocorreu um erro ao salvar. Tente novamente.');
+      document.getElementById('btnSalvar').disabled = false; 
+      document.getElementById('btnSalvar').innerText = isJust ? "Enviar Justificativa" : "Salvar Vistoria";
+    });
+  };
+</script>
+</body>
+</html>
