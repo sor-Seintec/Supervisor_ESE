@@ -16,12 +16,15 @@
             --border-dark: #cbd5e1;
             --primary: #2563eb;
             --week-bg: #1e293b;
-            --danger: #e11d48;
-            --success: #059669;
-            --amber: #f59e0b;
             --weekend-bg: #f1f5f9;
             --weekend-border: #e2e8f0;
             --weekend-text: #94a3b8;
+            
+            /* Sistema de Cores Unificado */
+            --c-visitado: #10b981;    /* Verde (V) */
+            --c-adiado: #9333ea;      /* Roxo (A) */
+            --c-cancelado: #ef4444;   /* Vermelho (C) */
+            --c-justificado: #3b82f6; /* Azul (J) */
         }
 
         body {
@@ -474,7 +477,7 @@
             border-color: var(--primary);
         }
 
-        /* BADGES DE STATUS (Vistorias) */
+        /* BADGES DE STATUS (Vistorias) - Atualizado com a Regra Unificada */
         .badge-status {
             position: absolute;
             bottom: 8px;
@@ -493,89 +496,30 @@
             user-select: none;
         }
 
-        .st-realizada {
-            background-color: var(--success);
-        }
+        .st-realizada { background-color: var(--c-visitado); }
+        .st-cancelada { background-color: var(--c-cancelado); }
+        .st-adiada { background-color: var(--c-adiado); }
+        .st-justificada { background-color: var(--c-justificado); }
 
-        .st-cancelada {
-            background-color: var(--danger);
-        }
+        .c-1 { --cor: #e11d48; }
+        .c-2 { --cor: #059669; }
+        .c-3 { --cor: #d946ef; }
+        .c-4 { --cor: #ea580c; }
+        .c-5 { --cor: #2563eb; }
+        .c-6 { --cor: #0891b2; }
 
-        .st-adiada {
-            background-color: var(--amber);
-        }
-
-        .c-1 {
-            --cor: #e11d48;
-        }
-
-        .c-2 {
-            --cor: #059669;
-        }
-
-        .c-3 {
-            --cor: #d946ef;
-        }
-
-        .c-4 {
-            --cor: #ea580c;
-        }
-
-        .c-5 {
-            --cor: #2563eb;
-        }
-
-        .c-6 {
-            --cor: #0891b2;
-        }
-
-        .k-card.c-1 .k-card-supervisor {
-            border-bottom-color: #e11d48;
-        }
-
-        .k-card.c-1 .cor-bolinha {
-            background: #e11d48;
-        }
-
-        .k-card.c-2 .k-card-supervisor {
-            border-bottom-color: #059669;
-        }
-
-        .k-card.c-2 .cor-bolinha {
-            background: #059669;
-        }
-
-        .k-card.c-3 .k-card-supervisor {
-            border-bottom-color: #d946ef;
-        }
-
-        .k-card.c-3 .cor-bolinha {
-            background: #d946ef;
-        }
-
-        .k-card.c-4 .k-card-supervisor {
-            border-bottom-color: #ea580c;
-        }
-
-        .k-card.c-4 .cor-bolinha {
-            background: #ea580c;
-        }
-
-        .k-card.c-5 .k-card-supervisor {
-            border-bottom-color: #2563eb;
-        }
-
-        .k-card.c-5 .cor-bolinha {
-            background: #2563eb;
-        }
-
-        .k-card.c-6 .k-card-supervisor {
-            border-bottom-color: #0891b2;
-        }
-
-        .k-card.c-6 .cor-bolinha {
-            background: #0891b2;
-        }
+        .k-card.c-1 .k-card-supervisor { border-bottom-color: #e11d48; }
+        .k-card.c-1 .cor-bolinha { background: #e11d48; }
+        .k-card.c-2 .k-card-supervisor { border-bottom-color: #059669; }
+        .k-card.c-2 .cor-bolinha { background: #059669; }
+        .k-card.c-3 .k-card-supervisor { border-bottom-color: #d946ef; }
+        .k-card.c-3 .cor-bolinha { background: #d946ef; }
+        .k-card.c-4 .k-card-supervisor { border-bottom-color: #ea580c; }
+        .k-card.c-4 .cor-bolinha { background: #ea580c; }
+        .k-card.c-5 .k-card-supervisor { border-bottom-color: #2563eb; }
+        .k-card.c-5 .cor-bolinha { background: #2563eb; }
+        .k-card.c-6 .k-card-supervisor { border-bottom-color: #0891b2; }
+        .k-card.c-6 .cor-bolinha { background: #0891b2; }
 
         .week-selector {
             display: flex;
@@ -624,24 +568,12 @@
             pointer-events: none;
         }
 
-        .toast.error {
-            background: var(--danger);
-        }
-
-        .toast.success {
-            background: var(--success);
-        }
+        .toast.error { background: var(--danger); }
+        .toast.success { background: var(--success); }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
     </style>
 </head>
@@ -650,7 +582,8 @@
 
     <div class="header">
         <h1>🗓️ Planejamento de Visitas (Kanban)</h1>
-        <a href="index.html" class="btn-back" id="linkVoltar">⬅ Voltar ao Coletor</a>
+        <!-- AQUI ESTÁ A CORREÇÃO: "index.html" com i minúsculo -->
+        <a href="index.html" class="btn-back" id="linkVoltar">⬅ Voltar ao Portal</a>
     </div>
 
     <div class="toolbar">
@@ -707,8 +640,7 @@
 
         <div style="display:flex;align-items:center;gap:12px;margin-left:auto;">
             <span id="statusBadge" class="badge-local">✅ Sincronizado</span>
-            <button class="btn-save-cloud" id="btnSalvarNuvem" onclick="salvarAgendaNaNuvem()">Sincronizar com
-                Nuvem</button>
+            <button class="btn-save-cloud" id="btnSalvarNuvem" onclick="salvarAgendaNaNuvem()">Sincronizar com Nuvem</button>
         </div>
     </div>
 
@@ -740,6 +672,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isAdmin = urlParams.get('admin') === 'true';
 
+        // AQUI TAMBÉM: "index.html" com i minúsculo
         if (isAdmin) {
             document.getElementById('linkVoltar').href = 'index.html?admin=true';
         }
@@ -866,9 +799,7 @@
         }
 
         function verificarDuplicataNaData(data, escola) {
-            // Verifica no cache local
             if (agendaLocal[data] && agendaLocal[data].some(item => item.escola === escola)) return true;
-            // Verifica na Nuvem também para impedir repetição
             if (agendaNuvem.some(item => item['Data Agendada'] && item['Data Agendada'].split('T')[0] === data && item['Escola'] === escola)) return true;
             return false;
         }
@@ -1026,14 +957,17 @@
                     let statusExecutado = vistoriasNuvem[chaveCruzamento];
                     let seloHtml = '';
 
+                    // LÓGICA DE CORES UNIFICADA AQUI (V, C, A, J)
                     if (statusExecutado) {
                         let stStr = String(statusExecutado).toLowerCase();
-                        if (stStr.includes('realizada')) {
-                            seloHtml = '<div class="badge-status st-realizada" title="Realizada">V</div>';
+                        if (stStr.includes('realizada') || stStr.includes('visitado')) {
+                            seloHtml = '<div class="badge-status st-realizada" title="Visitado">V</div>';
                         } else if (stStr.includes('cancelada')) {
                             seloHtml = '<div class="badge-status st-cancelada" title="Cancelada">C</div>';
-                        } else if (stStr.includes('adiada') || stStr.includes('justificada')) {
-                            seloHtml = '<div class="badge-status st-adiada" title="Adiada/Justificada">A</div>';
+                        } else if (stStr.includes('adiada')) {
+                            seloHtml = '<div class="badge-status st-adiada" title="Adiada">A</div>';
+                        } else if (stStr.includes('justificada')) {
+                            seloHtml = '<div class="badge-status st-justificada" title="Justificada">J</div>';
                         }
                     }
 
@@ -1048,7 +982,6 @@
                             </div>
                             ${seloHtml}
                         `;
-                    // Cards da nuvem não mostram o "X" para impedir corromper a base até o Backend suportar deleções
                     adicionarCardNoCalendario(cardsList, { supervisor: item.supervisor, escola: item.escola, turno: item.turno, cor: corCls, html: mockHtml }, item.fromCloud);
                 });
 
@@ -1081,7 +1014,6 @@
             const newCard = document.createElement('div');
             newCard.className = `k-card ${data.cor}`;
 
-            // Se veio da nuvem, bloqueamos a exclusão manual no Frontend para proteger o banco
             let btnClose = isCloud ? '' : `<button class="btn-remove-card" onclick="removerCard(this)">✕</button>`;
 
             newCard.innerHTML = `${btnClose}${data.html}`;
@@ -1193,7 +1125,6 @@
             Promise.all(promessas).then(() => {
                 mostrarToast("✅ Agenda atualizada na nuvem com sucesso!", 'success');
 
-                // CORREÇÃO MESTRA DO BUG DE REPETIÇÃO: Limpamos o cache local logo após a nuvem confirmar recebimento.
                 agendaLocal = {};
                 salvarAgendaLocal();
 
@@ -1207,7 +1138,7 @@
         }
 
         function iniciarAplicativo() {
-            setSemanaAtualParaHoje(); // Puxa o Kanban exatamente para a semana que estamos
+            setSemanaAtualParaHoje();
             carregarEscolasDisponiveis();
             carregarAgendaLocal();
             buscarAgendaDaNuvem();
