@@ -78,17 +78,16 @@
 <body>
 
 <div id="loginScreen">
-    <div class="login-card">
-        <h1 style="font-size: 22px; margin-bottom: 5px;">Acesso Restrito</h1>
-        <p class="subtitle" style="margin-bottom: 15px; font-size: 13px;">Sistema URE</p>
-        <button id="btnGoogleLogin" class="btn-social">Entrar com o Google</button>
-        <button id="btnMicrosoftLogin" class="btn-social">Entrar com a Microsoft</button>
-        <div class="divider">ou use e-mail e senha</div>
-        <input type="email" id="loginEmail" class="login-input" placeholder="Seu e-mail">
-        <input type="password" id="loginPassword" class="login-input" placeholder="Sua senha">
-        <button id="btnEmailLogin" class="btn-email-login">Entrar</button>
-        <button type="button" class="toggle-reg" id="btnToggleReg">Não tem conta? Cadastre-se</button>
-    </div>
+  <div class="login-card">
+    <h1 style="font-size: 22px; margin-bottom: 5px;">Acesso Restrito</h1>
+    <p class="subtitle" style="margin-bottom: 15px; font-size: 13px;">Sistema URE</p>
+    <button id="btnGoogleLogin" class="btn-social">Entrar com o Google</button>
+    <div class="divider">ou use e-mail e senha</div>
+    <input type="email" id="loginEmail" class="login-input" placeholder="Seu e-mail">
+    <input type="password" id="loginPassword" class="login-input" placeholder="Sua senha">
+    <button id="btnEmailLogin" class="btn-email-login">Entrar</button>
+    <button type="button" class="toggle-reg" id="btnToggleReg">Não tem conta? Cadastre-se</button>
+  </div>
 </div>
 
 <div class="container">
@@ -177,7 +176,7 @@
 <!-- FIREBASE AUTH LOGIC -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDs12xgOEPIKu7pNjftNUThM0_-Z0BwoLY",
@@ -201,7 +200,6 @@
   });
 
   document.getElementById('btnGoogleLogin').addEventListener('click', () => { signInWithPopup(auth, new GoogleAuthProvider()).catch(e=>alert(e.message)); });
-  document.getElementById('btnMicrosoftLogin').addEventListener('click', () => { signInWithPopup(auth, new OAuthProvider('microsoft.com')).catch(e=>alert(e.message)); });
   
   document.getElementById('btnEmailLogin').addEventListener('click', () => {
     const e = document.getElementById('loginEmail').value, p = document.getElementById('loginPassword').value;
