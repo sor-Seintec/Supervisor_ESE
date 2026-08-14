@@ -650,7 +650,7 @@
 
     <div class="header">
         <h1>🗓️ Planejamento de Visitas (Kanban)</h1>
-        <a href="Index.html" class="btn-back" id="linkVoltar">⬅ Voltar ao Coletor</a>
+        <a href="index.html" class="btn-back" id="linkVoltar">⬅ Voltar ao Coletor</a>
     </div>
 
     <div class="toolbar">
@@ -741,7 +741,7 @@
         const isAdmin = urlParams.get('admin') === 'true';
 
         if (isAdmin) {
-            document.getElementById('linkVoltar').href = 'Index.html?admin=true';
+            document.getElementById('linkVoltar').href = 'index.html?admin=true';
         }
 
         const database = JSON.parse(localStorage.getItem('ure_database_v2')) || {
